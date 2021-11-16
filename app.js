@@ -16,7 +16,15 @@ const getPosts = async () => {
   const data = await res.json();
   posts = data;
   document.querySelector("#posts").innerHTML = posts
-    .map((post) => `<p>${post.title}</p>`)
+    .map(
+      (
+        post
+      ) => `<div style="border-bottom: 1px solid grey; padding-bottom: 20px;">
+        <p>${post.title}</p>
+        <button onclick="updatePost(${post.id})">Update me</button>
+        <button onclick="deletePost(${post.id})">Delete me</button>
+    </div>`
+    )
     .join("");
 };
 
@@ -41,8 +49,8 @@ const postPost = async () => {
 };
 
 //PUT
-const updatePost = async () => {
-  const res = await fetch("https://jsonplaceholder.typicode.com/posts/1", {
+const updatePost = async (id) => {
+  const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
     method: "put",
     body: JSON.stringify({
       title: "Tjoflöjt",
@@ -54,8 +62,8 @@ const updatePost = async () => {
 };
 
 //DELETE
-const deletePost = async () => {
-  const res = await fetch("https://jsonplaceholder.typicode.com/posts/1", {
+const deletePost = async (id) => {
+  const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
     method: "delete",
   });
   const data = await res.json();
@@ -66,6 +74,10 @@ window.addEventListener("load", () => {
   getPosts();
   getOnePost();
   document.querySelector("#post-stuff").addEventListener("click", postPost);
-  document.querySelector("#update-stuff").addEventListener("click", updatePost);
-  document.querySelector("#delete-stuff").addEventListener("click", deletePost);
+  document
+    .querySelector("#update-stuff")
+    .addEventListener("click", () => updatePost(3));
+  document
+    .querySelector("#delete-stuff")
+    .addEventListener("click", () => deletePost(8));
 });
